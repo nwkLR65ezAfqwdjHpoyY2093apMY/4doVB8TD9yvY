@@ -68,12 +68,11 @@ else
 end
 
 function lexRip:IsRunning()
-	if gethui then
-		return lexRip.Parent == gethui()
-	else
-		return lexRip.Parent == game:GetService("CoreGui")
-	end
-
+    if gethui then
+        return lexRip.Parent == gethui()  -- For Synapse or custom executor GUIs
+    else
+        return lexRip.Parent == game:GetService("CoreGui")  -- For normal GUI in CoreGui
+    end
 end
 
 local function AddConnection(Signal, Function)
@@ -86,13 +85,14 @@ local function AddConnection(Signal, Function)
 end
 
 task.spawn(function()
-	while (lexRip:IsRunning()) do
-		wait()
-	end
+    while lexRip:IsRunning() do
+        wait(1)  -- Check periodically
+    end
 
-	for _, Connection in next, lexRipCfg.Connections do
-		Connection:Disconnect()
-	end
+    -- Cleanup on GUI removal
+    for _, Connection in next, lexRipCfg.Connections do
+        Connection:Disconnect()
+    end
 end)
 
 local function AddDraggingFunctionality(DragPoint, Main)
