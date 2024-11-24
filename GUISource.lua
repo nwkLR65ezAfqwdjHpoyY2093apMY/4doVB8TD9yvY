@@ -68,11 +68,10 @@ else
 end
 
 function lexRip:IsRunning()
-    if gethui then
-        return lexRip.Parent == gethui()  -- For Synapse or custom executor GUIs
-    else
-        return lexRip.Parent == game:GetService("CoreGui")  -- For normal GUI in CoreGui
-    end
+    print("Parent of lexRip:", lexRip.Parent)
+    -- Check if it's in "HiddenUI" or CoreGui
+    local parentGui = game:GetService("CoreGui"):FindFirstChild("HiddenUI") or game:GetService("CoreGui")
+    return lexRip.Parent == parentGui
 end
 
 local function AddConnection(Signal, Function)
