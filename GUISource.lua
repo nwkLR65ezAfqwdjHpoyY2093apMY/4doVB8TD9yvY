@@ -67,24 +67,26 @@ else
 	end
 end
 
-function lexRip:IsRunning()
+local function IsRunning()
     print("Parent of lexRip:", lexRip.Parent)
     -- Check if it's in "HiddenUI" or CoreGui
     local parentGui = game:GetService("CoreGui"):FindFirstChild("HiddenUI") or game:GetService("CoreGui")
     return lexRip.Parent == parentGui
 end
 
+-- Function to add connection to signal
 local function AddConnection(Signal, Function)
-	if (not lexRip:IsRunning()) then
-		return
-	end
-	local SignalConnect = Signal:Connect(Function)
-	table.insert(lexRipCfg.Connections, SignalConnect)
-	return SignalConnect
+    if not IsRunning() then
+        return
+    end
+    local SignalConnect = Signal:Connect(Function)
+    table.insert(lexRipCfg.Connections, SignalConnect)
+    return SignalConnect
 end
 
+-- Periodically check if the GUI is running
 task.spawn(function()
-    while lexRip:IsRunning() do
+    while IsRunning() do
         wait(1)  -- Check periodically
     end
 
